@@ -140,7 +140,9 @@ elements.shopping.addEventListener('click', e => {
 });
 elements.recipe.addEventListener('click', e => {
     if (e.target.matches('.btn-decrease, .btn-decrease *')) {
-        state.recipe.updateServings('dec');
+        if (state.recipe.servings > 1) {
+            state.recipe.updateServings('dec');
+        }
         recipeView.updateIngredients(state.recipe);
     } else if (e.target.matches('.btn-increase ,.btn-increase *')) {
         state.recipe.updateServings('inc');
