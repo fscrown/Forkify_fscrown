@@ -25,30 +25,20 @@
          this.servings = 4;
      };
      parseIngredients() {
-
          //1 Uniform units
          const unitsLong = ['tablespoons', 'tablespoon', 'ounces', 'ounce', 'teaspoons', 'teaspoon', 'cups', 'cup', 'pounds'];
          const unitsShort = ['tbsp', 'tbsp', 'oz', 'oz', 'tsp', 'tsp', 'cup', 'cup', 'pound'];
-
-
          const newIngredient = this.ingredients.map(el => {
              let ingredient = el.toLowerCase();
              unitsLong.forEach((unit, i) => {
                  ingredient = ingredient.replace(unit, unitsShort[i]);
              });
-
-
-
-             // 2 Remove parentheses             
-             ingredient = ingredient.replace(/ *\([^)]*\) */g, " ");
-
-
-             //3 parse ingredient into count,unit,ingredient 
+             ingredient = ingredient.replace(/(\[|\]|\{|\})/g, '')
+                 // 2 Remove parentheses             
+                 //3 parse ingredient into count,unit,ingredient 
              const arrIng = ingredient.split(' ');
              const unitIndex = arrIng.findIndex(el2 => unitsShort.includes(el2));
              let objIng;
-
-
              if (unitIndex > -1) {
                  // there is a unit 
                  const arrCount = arrIng.slice(0, unitIndex);
@@ -57,14 +47,12 @@
                      count = eval(arrIng[0]);
                  } else {
                      count = parseInt(eval(arrIng.slice(0, unitIndex).join('+')), 10);
-
                  }
                  objIng = {
                      count,
                      unit: arrIng[unitIndex],
                      ingredient: arrIng.slice(unitIndex + 1).join(' ')
                  }
-
              } else if (parseInt(arrIng[0], 10)) {
                  //there is no unit , but 1st element is number
                  objIng = {
@@ -72,8 +60,6 @@
                      unit: '',
                      ingredient: arrIng.slice(1).join(' ')
                  }
-
-
              } else if (unitIndex === -1) {
                  // there is NO unit and NO number in 1st position
                  objIng = {
@@ -81,21 +67,25 @@
                      unit: '',
                      ingredient
                  }
-
              }
-
-
              return objIng;
-
-
-
-
-
-
-
          });
          this.ingredients = newIngredient;
+     }
 
+     updateServings(type) {
+
+
+         // 1/update servings
+         const newServings = type === 'dec' ? this.servings - 1 : this.servings + 1;
+
+
+         this.ingredients.forEach(ing => {
+             ing.count *= (newServings / this.servings);
+
+         });
+
+         this.servings = newServings;
 
      }
  };

@@ -11,7 +11,7 @@ export const clearResults = () => {
 
 };
 
-const limitRecipeTitle = (title, limit = 17) => {
+export const limitRecipeTitle = (title, limit = 17) => {
     const newTitle = [];
     if (title.length > 17) {
         title.split(' ').reduce((acc, cur) => {
@@ -33,6 +33,15 @@ const limitRecipeTitle = (title, limit = 17) => {
 
 
 };
+export const highlightSelector = id => {
+    const resultsArr = Array.from(document.querySelectorAll('.results__link'));
+    resultsArr.forEach(el => {
+        el.classList.remove('results__link--active');
+    });
+    document.querySelector(`.results__link[href*="${id}"]`).classList.add('results__link--active');
+
+
+}
 const renderRecipe = recipe => {
     const markup = `
     <li>
