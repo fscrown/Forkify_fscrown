@@ -82,7 +82,7 @@ const controlList = () => {
         listView.renderItem(item);
     });
 };
-state.Likes = new Likes();
+
 
 //Like Controller
 const controlLike = () => {
@@ -104,14 +104,16 @@ const controlLike = () => {
 
 
 
-
-
-
-
-
-
 }
 
+//Restore liked recipes on page load 
+window.addEventListener('load', () => {
+    state.Likes = new Likes();
+    state.Likes.readStorage();
+    likesView.toggleLikeMeu(state.Likes.getNumLikes());
+    state.Likes.likes.forEach(like => likesView.renderLike(like));
+
+});
 
 
 elements.searchForm.addEventListener('submit', e => {
